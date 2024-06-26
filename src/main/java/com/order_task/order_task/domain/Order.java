@@ -12,6 +12,7 @@ import lombok.extern.java.Log;
 public class Order {
     private Long id;
     private List<OrderItem> orderItems = new ArrayList<>();
+    private double total;
     private String status;
 
 }

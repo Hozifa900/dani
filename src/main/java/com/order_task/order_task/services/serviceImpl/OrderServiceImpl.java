@@ -13,11 +13,42 @@ public class OrderServiceImpl implements OrderService {
     public String createOrder(Order order) {
         try {
             System.out.println("Order created" + order.toString());
-            OrderList.addOrder(order);
+
+            int appleOffer = 0;
+            int orangeOffer = 0;
+
             float total = 0;
+
             for (OrderItem e : order.getOrderItems()) {
                 total += e.getProduct().getPrice() * e.getQuantity();
+                // the coming conditions for offer calculation
+                if (e.getProduct().getId() == 1) {
+                    appleOffer = e.getQuantity() / 1;
+                }
+                if (e.getProduct().getId() == 2) {
+                    orangeOffer = e.getQuantity() / 3;
+                }
+
             }
+
+            System.out.println("Total: " + total);
+            // calculate the total price after the offer of oranges
+            total = total - orangeOffer * 0.25f;
+
+            // add the total price to the order
+            order.setTotal(total);
+
+            // add the offer of apples to the order
+            for (OrderItem o : order.getOrderItems()) {
+                if (o.getProduct().getId() == 1) {
+                    o.setQuantity(o.getQuantity() + appleOffer);
+                }
+
+            }
+
+            // update the order status to created
+            order.setStatus("Order created");
+            OrderList.addOrder(order);
             return "Order created with total: " + total;
         } catch (Exception e) {
             return "Error creating order";
